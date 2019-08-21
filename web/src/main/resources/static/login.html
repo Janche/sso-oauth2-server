@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>登录</title>
+    <link rel="stylesheet" href="css/login.css" type="text/css" />
+  </head>
+  <body>
+    <div class="login-page">
+      <img class="logo" src="./assets/logo.png" alt="力比科技" />
+      <form
+        id="login-form"
+        class="login-form"
+        action="/login"
+        method="post"
+      >
+        <div class="form">
+          <h3 class="form-title">libii运营平台</h3>
+          <div class="inputs-wrapper">
+            <input
+              type="text"
+              placeholder="账号"
+              name="username"
+              required="required"
+              class="login-input"
+            /><br /><br />
+            <input
+              type="password"
+              placeholder="密码"
+              name="password"
+              required="required"
+              class="login-input"
+            /><br />
+          </div>
+          <button class="login-button" type="submit">登录</button>
+        </div>
+      </form>
+    </div>
+  </body>
+  <script src="./js/login.js"></script>
+</html>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.janche.user.dao.MenuRightMapper">
+  <resultMap id="BaseResultMap" type="com.example.janche.user.domain.MenuRight">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="module" jdbcType="VARCHAR" property="module" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="method" jdbcType="VARCHAR" property="method" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="grades" jdbcType="INTEGER" property="grades" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+
+  <resultMap id="MenuDTOMap" type="com.example.janche.user.dto.MenuDTO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="module" jdbcType="VARCHAR" property="module" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="method" jdbcType="VARCHAR" property="method" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="grades" jdbcType="INTEGER" property="grades" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <collection javaType="java.util.ArrayList" ofType="com.example.janche.user.domain.Role" property="roles">
+      <id column="rid" jdbcType="BIGINT" property="id" />
+      <result column="rname" jdbcType="VARCHAR" property="name" />
+      <result column="description" jdbcType="VARCHAR" property="description" />
+      <result column="rstatus" jdbcType="INTEGER" property="status" />
+    </collection>
+  </resultMap>
+
+  <select id="getAllMenus" resultMap="MenuDTOMap">
+    select
+        m.*,
+        r.id rid,
+        r.name rname,
+        r.status rstatus
+    from menu_right m
+    left join role_right rr
+        on rr.menu_id = m.id
+    left join role r
+        on r.id = rr.role_id
+    where m.status = 1 and m.grades = 3
+    order by m.id desc
+  </select>
+
+  <select id="getMenusByUserId" resultMap="MenuDTOMap">
+    select
+        m.*
+    from menu_right m
+    join user_right ur
+        on ur.menu_id = m.id
+    where m.status = 1 and m.grades = 3 and ur.user_id = #{userId}
+    order by m.id desc
+  </select>
+
+  <!-- 获取用户可访问的所有菜单 -->
+  <select id="getUserMenus" resultMap="BaseResultMap">
+    select DISTINCT
+    m.*
+    from menu_right m
+    left join user_right ur on ur.user_id = #{userId}
+    left join role_right rr on ur.menu_id = m.id or rr.menu_id = m.id
+    left join role r on r.id = rr.role_id
+    left join user_role ur2 on ur2.role_id = r.id
+    left join user u on u.id = ur2.user_id
+    where
+    u.id = #{userId}
+    and m.status = 1
+    and m.grades <![CDATA[<=]]> 2
+    order by m.id asc
+  </select>
+
+  <!-- 获取用户私有的菜单 -->
+  <select id="getUserMenus2" resultMap="BaseResultMap">
+    select
+        m.*
+    from menu_right m
+    join user_right ur on ur.menu_id = m.id
+    where
+    ur.user_id = #{userId}
+    and m.status = 1
+    and m.grades <![CDATA[<=]]> 2
+    order by m.id asc
+  </select>
+</mapper>

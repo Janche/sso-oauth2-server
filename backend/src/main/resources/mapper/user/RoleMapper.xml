@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.janche.user.dao.RoleMapper">
+    <resultMap id="BaseResultMap" type="com.example.janche.user.domain.Role">
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result column="name" jdbcType="VARCHAR" property="name" />
+      <result column="description" jdbcType="VARCHAR" property="description" />
+      <result column="seq" jdbcType="INTEGER" property="seq" />
+      <result column="status" jdbcType="INTEGER" property="status" />
+      <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    </resultMap>
+
+    <resultMap id="RoleDTOMap" type="com.example.janche.user.dto.role.RoleDTO">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="seq" jdbcType="INTEGER" property="seq" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+
+       <!--权限列表-->
+       <collection property="menus" ofType="com.example.janche.user.domain.MenuRight" javaType="java.util.ArrayList">
+           <id column="mid" jdbcType="BIGINT" property="id" />
+           <result column="mparent_id" jdbcType="BIGINT" property="parentId" />
+           <result column="module" jdbcType="VARCHAR" property="module" />
+           <result column="mname" jdbcType="VARCHAR" property="name" />
+           <result column="method" jdbcType="VARCHAR" property="method" />
+           <result column="url" jdbcType="VARCHAR" property="url" />
+           <result column="icon" jdbcType="VARCHAR" property="icon" />
+           <result column="grades" jdbcType="INTEGER" property="grades" />
+           <result column="mseq" jdbcType="INTEGER" property="seq" />
+           <result column="mstatus" jdbcType="INTEGER" property="status" />
+           <result column="mcreate_time" jdbcType="TIMESTAMP" property="createTime" />
+           <result column="mmodify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+       </collection>
+    </resultMap>
+
+    <!-- 获取角色和权限信息 -->
+    <select id="getMenusByRoleId" resultMap="RoleDTOMap">
+       select
+        r.*,
+        m.id as mid,
+        m.parent_id as mparent_id,
+        m.module,
+        m.name mname,
+        m.method,
+        m.url,
+        m.icon,
+        m.status mstatus,
+        m.grades,
+        m.seq as mseq,
+        m.create_time as mcreate_time,
+        m.modify_time as mmodify_time
+        from role r
+        left join role_right rr
+            on rr.role_id = r.id
+        left join menu_right m
+            on rr.menu_id = m.id
+        where r.id = #{id}
+        and r.status = 1
+        order by m.id ASC
+    </select>
+
+    <!--查询下级所有角色-->
+    <select id="findRoleByIndex" resultMap="BaseResultMap">
+       /* select
+          r2.*
+        from role r
+        join role r2 on r2.role_index like concat(r.role_index, ',%')
+        where r.role_index = #{index} and find_in_set(r.id, r2.role_index)*/
+    </select>
+
+    <select id="getRolesByUrl" resultMap="BaseResultMap">
+        select
+        distinct r.* from role r
+        left join role_right rr on rr.role_id = r.id
+        left join menu_right m on m.id = rr.menu_id
+        where m.url = #{url}
+    </select>
+
+</mapper>

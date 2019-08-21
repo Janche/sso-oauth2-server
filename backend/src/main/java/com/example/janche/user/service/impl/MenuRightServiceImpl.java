@@ -92,31 +92,15 @@ public class MenuRightServiceImpl extends AbstractService<MenuRight> implements 
      * @return
      */
     @Override
-    public List<MenuDTO> getUserMenus(Long userId) {
-        Role role = Role.builder()
-                .name("LOGIN")
-                .description("用户独有的权限")
-                .status(Constant.STATUS_ENABLE)
-                .build();
-        List<Role> roles = Arrays.asList(role);
-        List<MenuDTO> allMenus = menuRightMapper.getAllMenus();
-        List<MenuDTO> userMenus = menuRightMapper.getMenusByUserId(userId);
-        userMenus.forEach(um ->
-            allMenus.forEach(m -> {
-                if(m.getId().equals(um.getId())){
-                    m.setRoles(roles);
-                }
-            })
-        );
-        return allMenus;
+    public List<MenuDTO> getUserMenus() {
+        return menuRightMapper.getAllMenus();
     }
 
     /**
      * 更新 权限到 redis
-     * @param userId
      */
-    public void updateMenu2Redis(Long userId){
-        List<MenuDTO> allMenus = this.getUserMenus(userId);
+    public void updateMenu2Redis(){
+        List<MenuDTO> allMenus = this.getUserMenus();
         List<Map<String, String[]>> menuMap = new ArrayList<>();
         allMenus.stream().filter(m -> m.getGrades() == 3).forEach(m -> {
             int size = m.getRoles().size();

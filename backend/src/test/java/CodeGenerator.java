@@ -68,8 +68,7 @@ public class CodeGenerator {
 
     public static void main(String[] args) {
         // genCodeByCustomModelName("menu_right", "UC", "MenuRight");  // 调用默认的模板
-//        genCodeByCustomModelNameAndTemplate("user", "user", "User","simpleDict"); // 调用simpleDict的模板
-        genCodeByCustomModelNameAndTemplate("user_right", "user", "UserAndRight","simpleDict"); // 调用simpleDict的模板
+       genCodeByCustomModelNameAndTemplate("user", "user", "User","simpleDict"); // 调用simpleDict的模板
 
 
     }

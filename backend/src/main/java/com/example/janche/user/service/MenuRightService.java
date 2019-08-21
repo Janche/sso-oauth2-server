@@ -49,17 +49,15 @@ public interface MenuRightService extends Service<MenuRight> {
 
     /**
      * 获取用户所有权限
-     * @param userId 用户ID
      * @return
      */
-    List<MenuDTO> getUserMenus(Long userId);
+    List<MenuDTO> getUserMenus();
 
     /**
      * 获取用户的权限
-     * @param userId
      * @return
      */
-    void updateMenu2Redis(Long userId);
+    void updateMenu2Redis();
 
     /**
      * 获取系统列表

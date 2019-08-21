@@ -1,6 +1,7 @@
 package com.example.janche.security.metadatasource;
 
 import com.example.janche.security.utils.SecurityUtils;
+import com.example.janche.user.dao.MenuRightMapper;
 import com.example.janche.user.domain.Role;
 import com.example.janche.user.dto.MenuDTO;
 import com.example.janche.user.service.MenuRightService;
@@ -21,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
     @Resource
-    private MenuRightService menuRightService;
+    private MenuRightMapper menuRightMapper;
 
     /**
      * 当前激活的配置文件
@@ -51,8 +52,8 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
         // 获取用户ID
         Long userId = SecurityUtils.getLoginUserId();
         if (null != userId && userId != -1){
-            // 获取系统所有权限，用户独有权限为 ROLE_LOGIN
-            List<MenuDTO> menuDTOS = menuRightService.getUserMenus(userId);
+            // 获取系统所有权限
+            List<MenuDTO> menuDTOS = menuRightMapper.getAllMenus();
             for (MenuDTO menu : menuDTOS) {
                 if (antPathMatcher.match(menu.getUrl(), requestUrl)
                         && menu.getRoles().size()>0) {

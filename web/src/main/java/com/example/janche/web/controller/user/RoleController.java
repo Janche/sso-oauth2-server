@@ -43,8 +43,7 @@ public class RoleController {
     @ApiOperation(value = "新增角色", notes = "新增角色", produces = "application/json")
     public RestResult add(@ApiParam(name = "角色", required = true) RoleInputDTO inputDTO) {
         roleService.addRole(inputDTO);
-        Long userId = SecurityUtils.getLoginUserId();
-        menuRightService.updateMenu2Redis(userId);
+        menuRightService.updateMenu2Redis();
         return ResultGenerator.genSuccessResult().setMessage("保存成功");
     }
 
@@ -78,8 +77,7 @@ public class RoleController {
     @ApiOperation(value = "修改角色", notes = "修改角色" , produces = "application/json")
     public RestResult update(@ApiParam(name = "角色信息", required = true) @RequestBody RoleInputDTO inputDTO) {
         roleService.updateRole(inputDTO);
-        Long userId = SecurityUtils.getLoginUserId();
-        menuRightService.updateMenu2Redis(userId);
+        menuRightService.updateMenu2Redis();
         return ResultGenerator.genSuccessResult().setMessage("修改成功");
     }
 

@@ -164,12 +164,4 @@ public class UserController  {
         List<User> list = userService.listAll();
         return list;
     }
-
-    @Log
-    @ApiOperation(value = "用户所有的权限", notes = "SSO客户端使用接口", produces = "application/json")
-    @PostMapping("/oauth/menu")
-    public List<MenuDTO> getSsoUserMenus() {
-        Long userId = SecurityUtils.getLoginUserId();
-        return menuRightService.getUserMenus(userId);
-    }
 }

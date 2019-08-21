@@ -7,7 +7,6 @@
     -->
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
-    <result column="module" jdbcType="VARCHAR" property="module" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="method" jdbcType="VARCHAR" property="method" />
     <result column="url" jdbcType="VARCHAR" property="url" />
@@ -22,7 +21,6 @@
   <resultMap id="MenuDTOMap" type="com.example.janche.user.dto.MenuDTO">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
-    <result column="module" jdbcType="VARCHAR" property="module" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="method" jdbcType="VARCHAR" property="method" />
     <result column="url" jdbcType="VARCHAR" property="url" />
@@ -53,23 +51,12 @@
     order by m.id desc
   </select>
 
-  <select id="getMenusByUserId" resultMap="MenuDTOMap">
-    select
-        m.*
-    from menu_right m
-    join user_right ur
-        on ur.menu_id = m.id
-    where m.status = 1 and m.grades = 3 and ur.user_id = #{userId}
-    order by m.id desc
-  </select>
-
   <!-- 获取用户可访问的所有菜单 -->
   <select id="getUserMenus" resultMap="BaseResultMap">
     select DISTINCT
     m.*
     from menu_right m
-    left join user_right ur on ur.user_id = #{userId}
-    left join role_right rr on ur.menu_id = m.id or rr.menu_id = m.id
+    left join role_right rr on rr.menu_id = m.id
     left join role r on r.id = rr.role_id
     left join user_role ur2 on ur2.role_id = r.id
     left join user u on u.id = ur2.user_id
@@ -80,16 +67,4 @@
     order by m.id asc
   </select>
 
-  <!-- 获取用户私有的菜单 -->
-  <select id="getUserMenus2" resultMap="BaseResultMap">
-    select
-        m.*
-    from menu_right m
-    join user_right ur on ur.menu_id = m.id
-    where
-    ur.user_id = #{userId}
-    and m.status = 1
-    and m.grades <![CDATA[<=]]> 2
-    order by m.id asc
-  </select>
 </mapper>

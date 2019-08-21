@@ -98,7 +98,7 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
         }
 
         // 将用户权限存入Redis
-        menuRightService.updateMenu2Redis(userDetails.getId());
+        menuRightService.updateMenu2Redis();
         redisTemplate.opsForValue().set(Constant.REDIS_PERM_KEY_PREFIX + userName, "Login", Long.parseLong(timeout.substring(0, timeout.length()-1)), TimeUnit.SECONDS);
 
         // [5] 成功登陆，把用户信息提交给 Spring Security

@@ -1,17 +1,14 @@
 package com.example.janche.user.service.impl;
 
-import com.github.pagehelper.PageHelper;
 import com.example.janche.common.core.AbstractService;
 import com.example.janche.common.exception.CustomException;
 import com.example.janche.common.model.Constant;
 import com.example.janche.common.restResult.PageParam;
 import com.example.janche.common.restResult.ResultCode;
 import com.example.janche.user.dao.MenuRightMapper;
-import com.example.janche.user.dao.UserAndRightMapper;
 import com.example.janche.user.dao.UserAndRoleMapper;
 import com.example.janche.user.dao.UserMapper;
 import com.example.janche.user.domain.User;
-import com.example.janche.user.domain.UserAndRight;
 import com.example.janche.user.domain.UserAndRole;
 import com.example.janche.user.dto.LoginUserDTO;
 import com.example.janche.user.dto.MenuDTO;
@@ -20,6 +17,7 @@ import com.example.janche.user.dto.user.UserInputDTO;
 import com.example.janche.user.dto.user.UserOutpDTO;
 import com.example.janche.user.dto.user.UserPwdDTO;
 import com.example.janche.user.service.UserService;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -42,10 +40,6 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     private UserMapper userMapper;
     @Resource
     private UserAndRoleMapper userAndRoleMapper;
-    @Resource
-    private UserAndRightMapper userAndRightMapper;
-    @Resource
-    private MenuRightMapper menuRightMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -119,11 +113,6 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         if (StringUtils.isNotEmpty(roleIds)){
             insertUserAndRoles(roleIds, user);
         }
-        // 增加用户权限关联表
-        String menuIds = inputDTO.getMenuIds();
-        if (StringUtils.isNotEmpty(menuIds)){
-            insertUserAndMenus(menuIds, user);
-        }
     }
 
     /**
@@ -136,10 +125,6 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         Example example = new Example(UserAndRole.class);
         example.and().andEqualTo("userId", id);
         userAndRoleMapper.deleteByExample(example);
-        // 删除 用户独有的权限
-        example = new Example(UserAndRight.class);
-        example.and().andEqualTo("userId", id);
-        userAndRightMapper.deleteByExample(example);
         // 删除用户
         userMapper.deleteByPrimaryKey(id);
     }
@@ -155,10 +140,6 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         Example example = new Example(UserAndRole.class);
         example.and().andIn("userId", Ids);
         userAndRoleMapper.deleteByExample(example);
-        // 删除 用户独有的权限
-        example = new Example(UserAndRight.class);
-        example.and().andIn("userId", Ids);
-        userAndRightMapper.deleteByExample(example);
         // 删除用户
         userMapper.deleteByIds(ids);
     }
@@ -194,21 +175,15 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         Example example = new Example(UserAndRole.class);
         example.and().andEqualTo("userId", id);
         List<UserAndRole> userAndRoles = userAndRoleMapper.selectByExample(example);
-        example = new Example(UserAndRight.class);
-        List<UserAndRight> userAndRights = userAndRightMapper.selectByExample(example);
 
         Set<Long> roleSet = new HashSet<>();
-        Set<Long> menuSet = new HashSet<>();
         userAndRoles.stream().forEach(e ->
             roleSet.add(e.getRoleId())
         );
-        userAndRights.stream().forEach(e ->
-            menuSet.add(e.getMenuId())
-        );
+
         UserOutpDTO outpDTO = new UserOutpDTO();
         BeanUtils.copyProperties(user, outpDTO);
         outpDTO.setRoleIds(StringUtils.join(roleSet, ","));
-        outpDTO.setMenuIds(StringUtils.join(menuSet, ","));
         return outpDTO;
     }
 
@@ -228,19 +203,10 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         example.and().andEqualTo("userId", user.getId());
         userAndRoleMapper.deleteByExample(example);
 
-        // 删除用户权限关系
-        example = new Example(UserAndRight.class);
-        example.and().andEqualTo("userId", user.getId());
-        userAndRightMapper.deleteByExample(example);
         // 增加用户角色关联表
         String roleIds = inputDTO.getRoleIds();
         if (StringUtils.isNotEmpty(roleIds)){
             insertUserAndRoles(roleIds, user);
-        }
-        // 修改用户角色关联表
-        String menuIds = inputDTO.getMenuIds();
-        if (StringUtils.isNotEmpty(menuIds)){
-            insertUserAndMenus(menuIds, user);
         }
     }
 
@@ -259,23 +225,6 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
             list.add(build);
         });
         userAndRoleMapper.insertList(list);
-    }
-
-    /**
-     * 批量插入用户权限关联记录
-     * @param menuIds
-     * @param user
-     */
-    private void insertUserAndMenus(String menuIds, User user) {
-        List<UserAndRight> list = new ArrayList<>();
-        Arrays.stream(menuIds.split(",")).forEach(e -> {
-            UserAndRight build = UserAndRight.builder()
-                    .userId(user.getId())
-                    .menuId(Long.parseLong(e))
-                    .build();
-            list.add(build);
-        });
-        userAndRightMapper.insertList(list);
     }
 
     /**
@@ -321,14 +270,5 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     private Boolean checkUser(String username, String password){
         User user = this.findBy("username", username);
         return passwordEncoder.matches(password, user.getPassword());
-    }
-
-    /**
-     * 获取用户用户权限
-     * @return
-     */
-    @Override
-    public List<MenuDTO> getUserMenus(Long userId) {
-        return menuRightMapper.getMenusByUserId(userId);
     }
 }

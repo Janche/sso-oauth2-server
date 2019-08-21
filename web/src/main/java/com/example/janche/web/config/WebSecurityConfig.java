@@ -103,7 +103,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 .permitAll()
                 .failureHandler(securityAuthenticationFailureHandler)
-                .successHandler(userLoginSuccessHandler)
+                // .successHandler(userLoginSuccessHandler)
             .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(securityAuthenticationEntryPoint)

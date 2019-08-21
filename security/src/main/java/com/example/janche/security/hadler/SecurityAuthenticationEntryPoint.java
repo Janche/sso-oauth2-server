@@ -39,7 +39,9 @@ public class SecurityAuthenticationEntryPoint implements AuthenticationEntryPoin
 		}
 		// ResponseUtils.renderJson(request, response, ResultCode.UNLOGIN, applicationConfig.getOrigins());
 
-		response.sendRedirect(front_url + "/login");
-		// response.sendRedirect("/static/login.html");
+		// 前后端分离时，可将此处替换为 前端登录页面的地址
+		// response.sendRedirect(front_url + "/login");
+		// 启用 服务器内部的登录地址
+		response.sendRedirect("/static/login.html");
 	}
 }

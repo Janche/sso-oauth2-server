@@ -27,9 +27,6 @@ public class MenuRight implements Serializable {
     @ApiModelProperty(value="父ID")
     private Long parentId;
 
-    @ApiModelProperty(value="系统名称")
-    private String module;
-
     @ApiModelProperty(value="权限名称")
     private String name;
 

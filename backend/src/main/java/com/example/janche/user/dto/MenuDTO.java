@@ -19,8 +19,6 @@ public class MenuDTO implements Serializable {
 
     private Long parentId;
 
-    private String module;
-
     private String name;
 
     private Integer seq;

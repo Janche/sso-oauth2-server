@@ -24,7 +24,6 @@
        <collection property="menus" ofType="com.example.janche.user.domain.MenuRight" javaType="java.util.ArrayList">
            <id column="mid" jdbcType="BIGINT" property="id" />
            <result column="mparent_id" jdbcType="BIGINT" property="parentId" />
-           <result column="module" jdbcType="VARCHAR" property="module" />
            <result column="mname" jdbcType="VARCHAR" property="name" />
            <result column="method" jdbcType="VARCHAR" property="method" />
            <result column="url" jdbcType="VARCHAR" property="url" />
@@ -43,7 +42,6 @@
         r.*,
         m.id as mid,
         m.parent_id as mparent_id,
-        m.module,
         m.name mname,
         m.method,
         m.url,

@@ -97,10 +97,4 @@ public interface UserService extends Service<User> {
      * @return
      */
     UserOutpDTO findOne(Long id);
-
-    /**
-     * 获取用户所有的权限
-     * @return
-     */
-    List<MenuDTO> getUserMenus(Long userId);
 }

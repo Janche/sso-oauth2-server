@@ -34,7 +34,6 @@ public class SecurityLogoutSuccessHandler implements LogoutSuccessHandler {
 
 		// 清除登录的session
 		request.getSession().invalidate();
-
 		// 清除Redis中的用户权限信息
 		try {
 			redisTemplate.delete(Constant.REDIS_PERM_KEY_PREFIX + authentication.getName());

@@ -55,9 +55,10 @@ public interface MenuRightService extends Service<MenuRight> {
 
     /**
      * 获取用户的权限
+     * @param username
      * @return
      */
-    void updateMenu2Redis();
+    void updateMenu2Redis(String username);
 
     /**
      * 获取系统列表

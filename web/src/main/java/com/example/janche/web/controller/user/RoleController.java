@@ -1,6 +1,5 @@
 package com.example.janche.web.controller.user;
 
-import com.github.pagehelper.PageInfo;
 import com.example.janche.common.restResult.PageParam;
 import com.example.janche.common.restResult.RestResult;
 import com.example.janche.common.restResult.ResultGenerator;
@@ -10,9 +9,9 @@ import com.example.janche.user.dto.TreeNodeDTO;
 import com.example.janche.user.dto.role.RoleConditionDTO;
 import com.example.janche.user.dto.role.RoleInputDTO;
 import com.example.janche.user.dto.role.RoleOutpDTO;
-import com.example.janche.user.service.MenuRightService;
 import com.example.janche.user.service.RoleService;
 import com.example.janche.web.aop.Log;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -35,15 +34,12 @@ import java.util.Set;
 public class RoleController {
     @Resource
     private RoleService roleService;
-    @Resource
-    private MenuRightService menuRightService;
 
     @Log(value = 1, description = "新增角色", type = 2)
     @PostMapping("/add")
     @ApiOperation(value = "新增角色", notes = "新增角色", produces = "application/json")
     public RestResult add(@ApiParam(name = "角色", required = true) RoleInputDTO inputDTO) {
         roleService.addRole(inputDTO);
-        menuRightService.updateMenu2Redis();
         return ResultGenerator.genSuccessResult().setMessage("保存成功");
     }
 
@@ -77,7 +73,6 @@ public class RoleController {
     @ApiOperation(value = "修改角色", notes = "修改角色" , produces = "application/json")
     public RestResult update(@ApiParam(name = "角色信息", required = true) @RequestBody RoleInputDTO inputDTO) {
         roleService.updateRole(inputDTO);
-        menuRightService.updateMenu2Redis();
         return ResultGenerator.genSuccessResult().setMessage("修改成功");
     }
 

@@ -98,8 +98,9 @@ public class MenuRightServiceImpl extends AbstractService<MenuRight> implements 
 
     /**
      * 更新 权限到 redis
+     * @param username
      */
-    public void updateMenu2Redis(){
+    public void updateMenu2Redis(String username){
         List<MenuDTO> allMenus = this.getUserMenus();
         List<Map<String, String[]>> menuMap = new ArrayList<>();
         allMenus.stream().filter(m -> m.getGrades() == 3).forEach(m -> {
@@ -109,10 +110,10 @@ public class MenuRightServiceImpl extends AbstractService<MenuRight> implements 
                 roles[i] = "ROLE_" + m.getRoles().get(i).getName();
             }
             Map<String, String[]> map = new HashMap<>();
-            map.put(m.getUrl() + ":" + m.getMethod(), roles);
+            map.put(m.getMethod() + ":" + m.getUrl() , roles);
             menuMap.add(map);
         });
-        redisTemplate.opsForValue().set(Constant.REDIS_PERM_KEY_PREFIX, menuMap, Long.parseLong(timeout.substring(0, timeout.length()-1)), TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(Constant.REDIS_PERM_KEY_PREFIX + username, menuMap, Long.parseLong(timeout.substring(0, timeout.length()-1)), TimeUnit.SECONDS);
     }
 
     /**

@@ -110,7 +110,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(securityAccessDeniedHandler)
             .and()
                 .logout()
-                .deleteCookies("SESSION")
+                .deleteCookies("SSO-SESSIONID")
                 .logoutUrl("/logout")
                 .logoutSuccessHandler(securityLogoutSuccessHandler)
                 .permitAll()

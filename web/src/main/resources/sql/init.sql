@@ -101,8 +101,8 @@ CREATE TABLE `oauth_client_details`  (
 
 SET FOREIGN_KEY_CHECKS = 1;
 
-INSERT INTO `oauth_client_details` VALUES ('sheep1', '', '$2a$10$4ZpXaJyS4/oLUCsIDz1kCO7T7g9LtVq8hD1E0PJQwVfvI48U.RF7.', 'all', 'authorization_code, refresh_token', 'http://localhost:8086/login', NULL, 30, 60, NULL, 'true', '2019-07-18 10:00:19');
-INSERT INTO `oauth_client_details` VALUES ('sheep2', '', '$2a$10$4ZpXaJyS4/oLUCsIDz1kCO7T7g9LtVq8hD1E0PJQwVfvI48U.RF7.', 'all', 'authorization_code, refresh_token', 'http://localhost:8087/client2/login', NULL, 30, 60, NULL, 'true', '2019-07-18 10:26:29');
+INSERT INTO `oauth_client_details` VALUES ('janche1', '', '$2a$10$4ZpXaJyS4/oLUCsIDz1kCO7T7g9LtVq8hD1E0PJQwVfvI48U.RF7.', 'all', 'authorization_code, refresh_token', 'http://localhost:8086/login', NULL, 10, 60, NULL, 'true', '2019-07-18 10:00:19');
+INSERT INTO `oauth_client_details` VALUES ('janche2', '', '$2a$10$4ZpXaJyS4/oLUCsIDz1kCO7T7g9LtVq8hD1E0PJQwVfvI48U.RF7.', 'all', 'authorization_code, refresh_token', 'http://localhost:8087/client2/login', NULL, 10, 60, NULL, 'true', '2019-07-18 10:26:29');
 
 INSERT INTO `role` VALUES (1,  '超级管理员', '超级管理员', NULL, 1, '2018-11-21 16:58:11', '2019-08-19 16:38:07');
 INSERT INTO `role` VALUES (2,  '系统管理员', '系统管理员', NULL, 1, '2018-11-21 16:58:07', '2019-01-21 17:22:34');

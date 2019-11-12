@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TreeNodeDTO implements Serializable, Comparable<TreeNodeDTO> {
-    
+
     private Long id;
     private Long parentId;
     private String name;
@@ -30,7 +30,7 @@ public class TreeNodeDTO implements Serializable, Comparable<TreeNodeDTO> {
         //递归添加节点
         if (0 == node.parentId) {
             this.children.add(node);
-        } else if (node.parentId == this.id) {
+        } else if (node.parentId.equals(this.id)) {
             this.children.add(node);
         } else {
             // 递归

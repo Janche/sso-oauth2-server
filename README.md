@@ -20,3 +20,6 @@
 单点登录客户端：https://blog.csdn.net/qq_34997906/article/details/100014815
 单点登录服务端：https://blog.csdn.net/qq_34997906/article/details/97007709
 
+### 补充说明
+数据库初始的账号密码为：123456,只是都用的密文存储
+

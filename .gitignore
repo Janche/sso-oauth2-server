@@ -12,7 +12,7 @@
 *.tar.gz
 *.rar
 
-/target/
+/target
 
 /log/
 

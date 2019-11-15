@@ -16,6 +16,7 @@ import com.example.janche.user.dto.LoginUserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -57,8 +58,14 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         // 记录登录成功的日志
         this.saveLog(request, authentication);
-        // JSON 格式的返回
+
+        // 登录成功后两种返回方式
+        // 1. JSON 格式的返回，让前端
         ResponseUtils.renderSuccessJson(request, response, new RestResult(200, "登录成功", dto), applicationConfig.getOrigins());
+
+        // 2. 直接跳转到首页，也可写自定义的前端地址
+        // response.sendRedirect("/static/index.html");
+
     }
 
 
